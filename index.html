@@ -3,38 +3,62 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Basic Playing Cards</title>
+    <title>Enhanced Playing Cards</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background-color: #076324; /* Poker table green */
             text-align: center;
             padding: 20px;
+            color: white;
         }
         
         h1 {
             color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+        
+        .poker-table {
+            width: 90%;
+            max-width: 800px;
+            height: 400px;
+            background-color: #0a7e2c;
+            border-radius: 200px;
+            margin: 20px auto;
+            position: relative;
+            border: 15px solid #5d4037;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.4);
         }
         
         .card-container {
             display: flex;
             justify-content: center;
             gap: 10px;
-            margin: 30px 0;
-            flex-wrap: wrap;
+            margin: 0;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         
         .card {
             width: 80px;
             height: 120px;
             background-color: white;
-            border-radius: 5px;
+            border-radius: 10px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
             padding: 5px;
-            box-shadow: 2px 2px 5px rgba(0,0,0,0.3);
+            box-shadow: 2px 2px 5px rgba(0,0,0,0.5);
             position: relative;
+            transition: transform 0.3s ease;
+            cursor: pointer;
+            margin: 0 5px;
+        }
+        
+        .card:hover {
+            transform: translateY(-10px);
         }
         
         .card.red {
@@ -43,6 +67,16 @@
         
         .card.black {
             color: black;
+        }
+        
+        .card.face-down {
+            background-image: linear-gradient(45deg, #1e88e5, #0d47a1);
+        }
+        
+        .card.face-down .top-corner,
+        .card.face-down .bottom-corner,
+        .card.face-down .center {
+            display: none;
         }
         
         .top-corner {
@@ -65,41 +99,203 @@
             left: 50%;
             transform: translate(-50%, -50%);
         }
+        
+        .controls {
+            margin: 20px auto;
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #e0e0e0;
+            color: #333;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        button:hover {
+            background-color: #f5f5f5;
+            transform: translateY(-2px);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+        
+        .player-hand {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+        }
+        
+        .dealer-info {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.5);
+            padding: 5px 15px;
+            border-radius: 20px;
+        }
+        
+        .chip {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: inline-block;
+            margin: 0 5px;
+            border: 3px dashed white;
+        }
+        
+        .chip.red { background-color: #e53935; }
+        .chip.blue { background-color: #1e88e5; }
+        .chip.green { background-color: #43a047; }
+        .chip.black { background-color: #212121; }
+        
+        .pot {
+            position: absolute;
+            bottom: 150px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
     </style>
 </head>
 <body>
-    <h1>Playing Cards Display</h1>
+    <h1>Texas Hold'em Poker</h1>
     
-    <div class="card-container">
-        <!-- Hearts (Red) -->
-        <div class="card red">
-            <div class="top-corner">A<br>♥</div>
-            <div class="center">♥</div>
-            <div class="bottom-corner">A<br>♥</div>
+    <div class="poker-table">
+        <div class="dealer-info">Dealer: Player 1</div>
+        
+        <div class="card-container">
+            <!-- Community cards (The Flop, Turn, and River) -->
+            <div class="card red">
+                <div class="top-corner">10<br>♥</div>
+                <div class="center">♥</div>
+                <div class="bottom-corner">10<br>♥</div>
+            </div>
+            
+            <div class="card black">
+                <div class="top-corner">J<br>♠</div>
+                <div class="center">♠</div>
+                <div class="bottom-corner">J<br>♠</div>
+            </div>
+            
+            <div class="card red">
+                <div class="top-corner">Q<br>♦</div>
+                <div class="center">♦</div>
+                <div class="bottom-corner">Q<br>♦</div>
+            </div>
+            
+            <div class="card face-down"></div>
+            
+            <div class="card face-down"></div>
         </div>
         
-        <!-- Diamonds (Red) -->
-        <div class="card red">
-            <div class="top-corner">K<br>♦</div>
-            <div class="center">♦</div>
-            <div class="bottom-corner">K<br>♦</div>
+        <div class="pot">
+            <span>Current Pot</span>
+            <div>
+                <div class="chip red"></div>
+                <div class="chip blue"></div>
+                <div class="chip green"></div>
+                <span>$250</span>
+            </div>
         </div>
         
-        <!-- Clubs (Black) -->
-        <div class="card black">
-            <div class="top-corner">Q<br>♣</div>
-            <div class="center">♣</div>
-            <div class="bottom-corner">Q<br>♣</div>
-        </div>
-        
-        <!-- Spades (Black) -->
-        <div class="card black">
-            <div class="top-corner">J<br>♠</div>
-            <div class="center">♠</div>
-            <div class="bottom-corner">J<br>♠</div>
+        <div class="player-hand">
+            <div class="card black">
+                <div class="top-corner">A<br>♠</div>
+                <div class="center">♠</div>
+                <div class="bottom-corner">A<br>♠</div>
+            </div>
+            
+            <div class="card red">
+                <div class="top-corner">A<br>♦</div>
+                <div class="center">♦</div>
+                <div class="bottom-corner">A<br>♦</div>
+            </div>
         </div>
     </div>
     
-    <p style="color: white;">These are basic playing cards created with HTML and CSS.</p>
+    <div class="controls">
+        <button id="fold-btn">Fold</button>
+        <button id="check-btn">Check</button>
+        <button id="call-btn">Call</button>
+        <button id="raise-btn">Raise</button>
+        <button id="deal-btn">Deal New Hand</button>
+    </div>
+    
+    <script>
+        // Enhanced JavaScript functionality
+        
+        // 1. Card flipping functionality
+        document.querySelectorAll('.card.face-down').forEach(card => {
+            card.addEventListener('click', function() {
+                this.classList.toggle('face-down');
+                
+                // If card is being revealed, generate a random card
+                if (!this.classList.contains('face-down')) {
+                    const ranks = ['2', '3', '4', '5', '6', '7', '8', '9', '10', 'J', 'Q', 'K', 'A'];
+                    const suits = ['♥', '♦', '♣', '♠'];
+                    
+                    const randomRank = ranks[Math.floor(Math.random() * ranks.length)];
+                    const randomSuit = suits[Math.floor(Math.random() * suits.length)];
+                    const isRed = randomSuit === '♥' || randomSuit === '♦';
+                    
+                    if (isRed) {
+                        this.classList.add('red');
+                        this.classList.remove('black');
+                    } else {
+                        this.classList.add('black');
+                        this.classList.remove('red');
+                    }
+                    
+                    this.innerHTML = `
+                        <div class="top-corner">${randomRank}<br>${randomSuit}</div>
+                        <div class="center">${randomSuit}</div>
+                        <div class="bottom-corner">${randomRank}<br>${randomSuit}</div>
+                    `;
+                } else {
+                    // If card is being flipped back down, remove inner content
+                    this.innerHTML = '';
+                }
+            });
+        });
+        
+        // 2. Button functionality
+        document.getElementById('fold-btn').addEventListener('click', function() {
+            alert('You folded! Hand over.');
+            document.querySelectorAll('.player-hand .card').forEach(card => {
+                card.style.opacity = '0.5';
+            });
+        });
+        
+        document.getElementById('check-btn').addEventListener('click', function() {
+            alert('You checked!');
+        });
+        
+        document.getElementById('call-btn').addEventListener('click', function() {
+            alert('You called!');
+        });
+        
+        document.getElementById('raise-btn').addEventListener('click', function() {
+            const amount = prompt('How much would you like to raise?', '50');
+            if (amount) {
+                alert('You raised by $' + amount);
+            }
+        });
+        
+        document.getElementById('deal-btn').addEventListener('click', function() {
+            alert('Dealing a new hand...');
+            location.reload(); // Simple way to reset the game
+        });
+    </script>
 </body>
 </html>
